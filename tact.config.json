@@ -1,0 +1,9 @@
+{
+  "projects": [
+    {
+      "name": "TamkMemory",
+      "path": "./contracts/tamk_memory.tact",
+      "output": "./contracts/output"
+    }
+  ]
+}

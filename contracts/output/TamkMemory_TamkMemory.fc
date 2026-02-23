@@ -1,0 +1,417 @@
+#pragma version =0.4.6;
+#pragma allow-post-modification;
+#pragma compute-asm-ltr;
+
+;; TamkMemory_TamkMemory.headers.fc
+;;
+;; Header files for TamkMemory
+;; NOTE: declarations are sorted for optimal order
+;;
+
+;; __tact_context_get
+(int, slice, int, slice) __tact_context_get() inline;
+
+;; __tact_context_get_sender
+slice __tact_context_get_sender() inline;
+
+;; __tact_dict_get_int_cell
+cell __tact_dict_get_int_cell(cell d, int kl, int k) inline;
+
+;; __tact_dict_set_int_cell
+(cell, ()) __tact_dict_set_int_cell(cell d, int kl, int k, cell v) inline;
+
+;; $DeployOk$_store
+builder $DeployOk$_store(builder build_0, (int) v) inline;
+
+;; $DeployOk$_store_cell
+cell $DeployOk$_store_cell((int) v, builder b) inline;
+
+;; $MemoryValue$_store
+builder $MemoryValue$_store(builder build_0, (int, int) v) inline;
+
+;; $MemoryValue$_store_cell
+cell $MemoryValue$_store_cell((int, int) v, builder b) inline;
+
+;; $MemoryValue$_load
+(slice, ((int, int))) $MemoryValue$_load(slice sc_0) impure inline;
+
+;; $MemoryValue$_as_optional
+tuple $MemoryValue$_as_optional((int, int) v) inline;
+
+;; $MemoryValue$_load_opt
+tuple $MemoryValue$_load_opt(cell cl) inline;
+
+;; $TamkMemory$_store
+builder $TamkMemory$_store(builder build_0, (slice, cell) v) inline;
+
+;; $TamkMemory$_load
+(slice, ((slice, cell))) $TamkMemory$_load(slice sc_0) inline;
+
+;; $Context$_get_value
+_ $Context$_get_value((int, slice, int, slice) v) inline;
+
+;; $MemoryValue$_not_null
+((int, int)) $MemoryValue$_not_null(tuple v) inline;
+
+;; $MemoryValue$_to_tuple
+tuple $MemoryValue$_to_tuple(((int, int)) v) inline;
+
+;; $MemoryValue$_to_opt_tuple
+tuple $MemoryValue$_to_opt_tuple(tuple v) inline;
+
+;; $MemoryValue$_to_opt_external
+tuple $MemoryValue$_to_opt_external(tuple v) inline;
+
+;; $TamkMemory$init$_load
+(slice, ((slice))) $TamkMemory$init$_load(slice sc_0) inline;
+
+;; $TamkMemory$_contract_init
+(slice, cell) $TamkMemory$_contract_init(slice $owner) impure inline;
+
+;; $TamkMemory$_contract_load
+(slice, cell) $TamkMemory$_contract_load() impure inline;
+
+;; $TamkMemory$_contract_store
+() $TamkMemory$_contract_store((slice, cell) v) impure inline;
+
+;; $TamkMemory$_fun_retrieve
+((slice, cell), tuple) $TamkMemory$_fun_retrieve((slice, cell) $self, int $key) impure inline_ref;
+
+;; $TamkMemory$_fun_owner
+((slice, cell), slice) $TamkMemory$_fun_owner((slice, cell) $self) impure inline_ref;
+
+;; $MessageParameters$_constructor_bounce_to_value_mode_body
+((int, cell, int, slice, int)) $MessageParameters$_constructor_bounce_to_value_mode_body(int $bounce, slice $to, int $value, int $mode, cell $body) inline;
+
+;; $TamkMemory$_fun_notify
+((slice, cell), ()) $TamkMemory$_fun_notify((slice, cell) $self, cell $body) impure inline;
+
+;; $MemoryValue$_constructor_hash_version
+((int, int)) $MemoryValue$_constructor_hash_version(int $hash, int $version) inline;
+
+;; $DeployOk$_constructor_queryId
+((int)) $DeployOk$_constructor_queryId(int $queryId) inline;
+
+
+;; TamkMemory_TamkMemory.stdlib.fc
+global (int, slice, int, slice) __tact_context;
+global slice __tact_context_sender;
+global cell __tact_child_contract_codes;
+global int __tact_randomized;
+
+(int, slice, int, slice) __tact_context_get() inline {
+    return __tact_context;
+}
+
+slice __tact_context_get_sender() inline {
+    return __tact_context_sender;
+}
+
+forall X0, X1 -> tuple __tact_tuple_create_2((X0, X1) v) asm """
+    2 TUPLE
+""";
+
+forall X0, X1 -> (X0, X1) __tact_tuple_destroy_2(tuple v) asm """
+    2 UNTUPLE
+""";
+
+cell __tact_dict_get_int_cell(cell d, int kl, int k) inline {
+    var (r, ok) = idict_get_ref?(d, kl, k);
+    if (ok) {
+        return r;
+    } else {
+        return null();
+    }
+}
+
+(cell, ()) __tact_dict_set_int_cell(cell d, int kl, int k, cell v) inline {
+    if (null?(v)) {
+        var (r, ok) = idict_delete?(d, kl, k);
+        return (r, ());
+    } else {
+        return (idict_set_ref(d, kl, k, v), ());
+    }
+}
+
+int $global_myBalance() impure asm """
+    BALANCE FIRST
+""";
+
+() $global_nativeReserve(int $amount, int $mode) impure asm """
+    RAWRESERVE
+""";
+
+() $global_message((int, cell, int, slice, int) $params) impure asm """
+    NEWC
+    b{01} STSLICECONST  // store tag = $0 and ihr_disabled = true
+    1 STI               // store `bounce`
+    b{000} STSLICECONST // store bounced = false and src = addr_none
+    STSLICE             // store `to`
+    SWAP
+    STGRAMS             // store `value`
+    106 PUSHINT         // 1 + 4 + 4 + 64 + 32 + 1
+    STZEROES
+    // → Stack state
+    // s0: Builder
+    // s1: `body`
+    // s2: `mode`
+    STDICT
+    ENDC
+    SWAP
+    SENDRAWMSG
+""";
+
+((slice, cell), ()) $TamkMemory$_fun_notify((slice, cell) $self, cell $body) impure inline {
+    var (($self'owner, $self'memories)) = $self;
+    slice $to = __tact_context_get_sender();
+    int $bounce = false;
+    if (false) {
+        int $balance = $global_myBalance();
+        int $balanceBeforeMessage = ($balance - $Context$_get_value(__tact_context_get()));
+        if (($balanceBeforeMessage < 0)) {
+            $global_nativeReserve(0, 0);
+            $global_message($MessageParameters$_constructor_bounce_to_value_mode_body($bounce, $to, 0, 130, $body));
+            return (($self'owner, $self'memories), ());
+        }
+    }
+    $global_message($MessageParameters$_constructor_bounce_to_value_mode_body($bounce, $to, 0, 66, $body));
+    return (($self'owner, $self'memories), ());
+}
+
+;; TamkMemory_TamkMemory.storage.fc
+;;
+;; Type: Context
+;; TLB: _ bounceable:bool sender:address value:int257 raw:^slice = Context
+;;
+
+_ $Context$_get_value((int, slice, int, slice) v) inline {
+    var (v'bounceable, v'sender, v'value, v'raw) = v;
+    return v'value;
+}
+
+;;
+;; Type: MessageParameters
+;; TLB: _ mode:int257 body:Maybe ^cell value:int257 to:address bounce:bool = MessageParameters
+;;
+
+((int, cell, int, slice, int)) $MessageParameters$_constructor_bounce_to_value_mode_body(int $bounce, slice $to, int $value, int $mode, cell $body) inline {
+    return ($mode, $body, $value, $to, $bounce);
+}
+
+;;
+;; Type: DeployOk
+;; Header: 0xaff90f57
+;; TLB: deploy_ok#aff90f57 queryId:uint64 = DeployOk
+;;
+
+builder $DeployOk$_store(builder build_0, (int) v) inline {
+    var (v'queryId) = v;
+    build_0 = store_uint(build_0, 2952335191, 32);
+    build_0 = build_0.store_uint(v'queryId, 64);
+    return build_0;
+}
+
+cell $DeployOk$_store_cell((int) v, builder b) inline {
+    return $DeployOk$_store(b, v).end_cell();
+}
+
+((int)) $DeployOk$_constructor_queryId(int $queryId) inline {
+    return ($queryId);
+}
+
+;;
+;; Type: MemoryValue
+;; Header: 0x34f5ca4d
+;; TLB: memory_value#34f5ca4d hash:int257 version:int257 = MemoryValue
+;;
+
+builder $MemoryValue$_store(builder build_0, (int, int) v) inline {
+    var (v'hash, v'version) = v;
+    build_0 = store_uint(build_0, 888523341, 32);
+    build_0 = build_0.store_int(v'hash, 257);
+    build_0 = build_0.store_int(v'version, 257);
+    return build_0;
+}
+
+cell $MemoryValue$_store_cell((int, int) v, builder b) inline {
+    return $MemoryValue$_store(b, v).end_cell();
+}
+
+(slice, ((int, int))) $MemoryValue$_load(slice sc_0) impure inline {
+    throw_unless(129, sc_0~load_uint(32) == 888523341);
+    var v'hash = sc_0~load_int(257);
+    var v'version = sc_0~load_int(257);
+    return (sc_0, (v'hash, v'version));
+}
+
+tuple $MemoryValue$_as_optional((int, int) v) inline {
+    var (v'hash, v'version) = v;
+    return __tact_tuple_create_2(v'hash, v'version);
+}
+
+tuple $MemoryValue$_load_opt(cell cl) inline {
+    if (null?(cl)) {
+        return null();
+    }
+    var sc = cl.begin_parse();
+    return $MemoryValue$_as_optional(sc~$MemoryValue$_load());
+}
+
+((int, int)) $MemoryValue$_not_null(tuple v) inline {
+    var (int vvv'hash, int vvv'version) = __tact_tuple_destroy_2(v);
+    return (vvv'hash, vvv'version);
+}
+
+tuple $MemoryValue$_to_tuple(((int, int)) v) inline {
+    var (v'hash, v'version) = v;
+    return __tact_tuple_create_2(v'hash, v'version);
+}
+
+tuple $MemoryValue$_to_opt_tuple(tuple v) inline {
+    if (null?(v)) { return null(); } 
+    return $MemoryValue$_to_tuple($MemoryValue$_not_null(v)); 
+}
+
+tuple $MemoryValue$_to_opt_external(tuple v) inline {
+    var loaded = $MemoryValue$_to_opt_tuple(v);
+    if (null?(loaded)) {
+        return null();
+    } else {
+        return (loaded);
+    }
+}
+
+((int, int)) $MemoryValue$_constructor_hash_version(int $hash, int $version) inline {
+    return ($hash, $version);
+}
+
+;;
+;; Type: TamkMemory
+;; TLB: _ owner:address memories:dict<int, ^MemoryValue{hash:int257,version:int257}> = TamkMemory
+;;
+
+builder $TamkMemory$_store(builder build_0, (slice, cell) v) inline {
+    var (v'owner, v'memories) = v;
+    build_0 = build_0.store_slice(v'owner);
+    build_0 = build_0.store_dict(v'memories);
+    return build_0;
+}
+
+(slice, ((slice, cell))) $TamkMemory$_load(slice sc_0) inline {
+    var v'owner = sc_0~load_msg_addr();
+    var v'memories = sc_0~load_dict();
+    return (sc_0, (v'owner, v'memories));
+}
+
+(slice, ((slice))) $TamkMemory$init$_load(slice sc_0) inline {
+    var v'owner = sc_0~load_msg_addr();
+    return (sc_0, (v'owner));
+}
+
+(slice, cell) $TamkMemory$_contract_load() impure inline {
+    slice $sc = get_data().begin_parse();
+    int $loaded = $sc~load_int(1);
+    if ($loaded) {
+        return $sc~$TamkMemory$_load();
+    }
+    else {
+        (slice $owner) = $sc~$TamkMemory$init$_load();
+        $sc.end_parse();
+        return $TamkMemory$_contract_init($owner);
+    }
+}
+
+() $TamkMemory$_contract_store((slice, cell) v) impure inline {
+    builder b = begin_cell();
+    b = b.store_int(true, 1);
+    b = $TamkMemory$_store(b, v);
+    set_data(b.end_cell());
+}
+
+;;
+;; Contract TamkMemory functions
+;;
+
+(slice, cell) $TamkMemory$_contract_init(slice $owner) impure inline {
+    var (($self'owner, $self'memories)) = (null(), null());
+    $self'owner = $owner;
+    $self'memories = null();
+    return ($self'owner, $self'memories);
+}
+
+((slice, cell), tuple) $TamkMemory$_fun_retrieve((slice, cell) $self, int $key) impure inline_ref {
+    var (($self'owner, $self'memories)) = $self;
+    var $fresh$ret_0 = $MemoryValue$_load_opt(__tact_dict_get_int_cell($self'memories, 257, $key));
+    return (($self'owner, $self'memories), $fresh$ret_0);
+}
+
+((slice, cell), slice) $TamkMemory$_fun_owner((slice, cell) $self) impure inline_ref {
+    var (($self'owner, $self'memories)) = $self;
+    var $fresh$ret_1 = $self'owner;
+    return (($self'owner, $self'memories), $fresh$ret_1);
+}
+
+;;
+;; Get methods of a Contract TamkMemory
+;;
+
+_ %retrieve(int $key) method_id(109549) {
+    int $key = $key;
+    var self = $TamkMemory$_contract_load();
+    var res = self~$TamkMemory$_fun_retrieve($key);
+    return $MemoryValue$_to_opt_external(res);
+}
+
+_ %owner() method_id(83229) {
+    var self = $TamkMemory$_contract_load();
+    var res = self~$TamkMemory$_fun_owner();
+    return res;
+}
+
+;;
+;; Routing of a Contract TamkMemory
+;;
+
+;; message opcode reader utility: only binary receivers
+;; Returns 32 bit message opcode, otherwise throws the "Invalid incoming message" exit code
+(slice, int) ~load_opcode_internal(slice s) asm( -> 1 0) "32 LDUQ 130 THROWIFNOT";
+
+() recv_internal(int msg_value, cell in_msg_cell, slice in_msg) impure {
+    
+    ;; Context
+    var cs = in_msg_cell.begin_parse();
+    cs~skip_bits(2);
+    var msg_bounceable = cs~load_int(1);
+    var msg_bounced = cs~load_int(1);
+    slice msg_sender_addr = cs~load_msg_addr();
+    __tact_context = (msg_bounceable, msg_sender_addr, msg_value, cs);
+    __tact_context_sender = msg_sender_addr;
+    
+    ;; Load contract data
+    var ($self'owner, $self'memories) = $TamkMemory$_contract_load();
+    
+    ;; Handle bounced messages
+    if (msg_bounced) { return (); }
+    var op = in_msg~load_opcode_internal();
+    ;; Receive Store message
+    if (op == 3457468042) {
+        var $msg'key = in_msg~load_int(257);
+        var $msg'dataHash = in_msg~load_int(257);
+        var $msg'version = in_msg~load_int(257);
+        throw_unless(21757, ( equal_slices_bits(__tact_context_get_sender(), $self'owner) ));
+        $self'memories~__tact_dict_set_int_cell(257, $msg'key, $MemoryValue$_store_cell($MemoryValue$_constructor_hash_version($msg'dataHash, $msg'version), begin_cell()));
+        $TamkMemory$_contract_store(($self'owner, $self'memories));
+        return ();
+    }
+    
+    ;; Receive Deploy message
+    if (op == 0x946a98b6) {
+        var $deploy'queryId = in_msg~load_uint(64);
+        ($self'owner, $self'memories)~$TamkMemory$_fun_notify($DeployOk$_store_cell($DeployOk$_constructor_queryId($deploy'queryId), begin_cell()));
+        $TamkMemory$_contract_store(($self'owner, $self'memories));
+        return ();
+    }
+    
+    ;; Throw if not handled
+    throw(130);
+}

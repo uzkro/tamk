@@ -1,0 +1,316 @@
+// automatically generated from `@stdlib/std/stdlib.fc` `/home/icsmen/project/tamk-app/contracts/output/TamkMemory_TamkMemory.fc` 
+PROGRAM{
+  DECLPROC __tact_context_get
+  DECLPROC __tact_context_get_sender
+  DECLPROC __tact_dict_get_int_cell
+  DECLPROC __tact_dict_set_int_cell
+  DECLPROC $DeployOk$_store
+  DECLPROC $DeployOk$_store_cell
+  DECLPROC $MemoryValue$_store
+  DECLPROC $MemoryValue$_store_cell
+  DECLPROC $MemoryValue$_load
+  DECLPROC $MemoryValue$_as_optional
+  DECLPROC $MemoryValue$_load_opt
+  DECLPROC $TamkMemory$_store
+  DECLPROC $TamkMemory$_load
+  DECLPROC $Context$_get_value
+  DECLPROC $MemoryValue$_not_null
+  DECLPROC $MemoryValue$_to_tuple
+  DECLPROC $MemoryValue$_to_opt_tuple
+  DECLPROC $MemoryValue$_to_opt_external
+  DECLPROC $TamkMemory$init$_load
+  DECLPROC $TamkMemory$_contract_init
+  DECLPROC $TamkMemory$_contract_load
+  DECLPROC $TamkMemory$_contract_store
+  DECLPROC $TamkMemory$_fun_retrieve
+  DECLPROC $TamkMemory$_fun_owner
+  DECLPROC $MessageParameters$_constructor_bounce_to_value_mode_body
+  DECLPROC $TamkMemory$_fun_notify
+  DECLPROC $MemoryValue$_constructor_hash_version
+  DECLPROC $DeployOk$_constructor_queryId
+  109549 DECLMETHOD %retrieve
+  83229 DECLMETHOD %owner
+  DECLPROC recv_internal
+  DECLGLOBVAR __tact_context
+  DECLGLOBVAR __tact_context_sender
+  DECLGLOBVAR __tact_child_contract_codes
+  DECLGLOBVAR __tact_randomized
+  __tact_context_get PROCINLINE:<{
+    __tact_context GETGLOB
+    4 UNTUPLE
+  }>
+  __tact_context_get_sender PROCINLINE:<{
+    __tact_context_sender GETGLOB
+  }>
+  __tact_dict_get_int_cell PROCINLINE:<{
+    -ROT
+    DICTIGETREF
+    NULLSWAPIFNOT
+    IF:<{
+    }>ELSE<{
+      DROP
+      PUSHNULL
+    }>
+  }>
+  __tact_dict_set_int_cell PROCINLINE:<{
+    DUP
+    ISNULL
+    IF:<{
+      DROP
+      -ROT
+      DICTIDEL
+      DROP
+    }>ELSE<{
+      s1 s3 s3 XCHG3
+      DICTISETREF
+    }>
+  }>
+  $DeployOk$_store PROCINLINE:<{
+    2952335191 PUSHINT
+    ROT
+    32 STU
+    64 STU
+  }>
+  $DeployOk$_store_cell PROCINLINE:<{
+    SWAP
+    $DeployOk$_store INLINECALLDICT
+    ENDC
+  }>
+  $MemoryValue$_store PROCINLINE:<{
+    888523341 PUSHINT
+    s0 s3 XCHG2
+    32 STU
+    257 PUSHINT
+    STIX
+    257 PUSHINT
+    STIX
+  }>
+  $MemoryValue$_store_cell PROCINLINE:<{
+    -ROT
+    $MemoryValue$_store INLINECALLDICT
+    ENDC
+  }>
+  $MemoryValue$_load PROCINLINE:<{
+    32 LDU
+    SWAP
+    888523341 PUSHINT
+    EQUAL
+    129 THROWIFNOT
+    257 PUSHINT
+    LDIX
+    257 PUSHINT
+    LDIX
+    -ROT
+  }>
+  $MemoryValue$_as_optional PROCINLINE:<{
+        2 TUPLE
+  }>
+  $MemoryValue$_load_opt PROCINLINE:<{
+    DUP
+    ISNULL
+    IF:<{
+      DROP
+      PUSHNULL
+    }>ELSE<{
+      CTOS
+      $MemoryValue$_load INLINECALLDICT
+      1 2 BLKDROP2
+      $MemoryValue$_as_optional INLINECALLDICT
+    }>
+  }>
+  $TamkMemory$_store PROCINLINE:<{
+    s0 s2 XCHG
+    STSLICE
+    STDICT
+  }>
+  $TamkMemory$_load PROCINLINE:<{
+    LDMSGADDR
+    LDDICT
+    -ROT
+  }>
+  $Context$_get_value PROCINLINE:<{
+    s1 s3 XCHG
+    3 BLKDROP
+  }>
+  $MemoryValue$_not_null PROCINLINE:<{
+        2 UNTUPLE
+  }>
+  $MemoryValue$_to_tuple PROCINLINE:<{
+        2 TUPLE
+  }>
+  $MemoryValue$_to_opt_tuple PROCINLINE:<{
+    DUP
+    ISNULL
+    IF:<{
+      DROP
+      PUSHNULL
+    }>ELSE<{
+      $MemoryValue$_not_null INLINECALLDICT
+      $MemoryValue$_to_tuple INLINECALLDICT
+    }>
+  }>
+  $MemoryValue$_to_opt_external PROCINLINE:<{
+    $MemoryValue$_to_opt_tuple INLINECALLDICT
+    DUP
+    ISNULL
+    IF:<{
+      DROP
+      PUSHNULL
+    }>ELSE<{
+    }>
+  }>
+  $TamkMemory$init$_load PROCINLINE:<{
+    LDMSGADDR
+    SWAP
+  }>
+  $TamkMemory$_contract_init PROCINLINE:<{
+    PUSHNULL
+  }>
+  $TamkMemory$_contract_load PROCINLINE:<{
+    c4 PUSH
+    CTOS
+    1 LDI
+    SWAP
+    IF:<{
+      $TamkMemory$_load INLINECALLDICT
+      1 2 BLKDROP2
+    }>ELSE<{
+      $TamkMemory$init$_load INLINECALLDICT
+      SWAP
+      ENDS
+      $TamkMemory$_contract_init INLINECALLDICT
+    }>
+  }>
+  $TamkMemory$_contract_store PROCINLINE:<{
+    NEWC
+    TRUE
+    SWAP
+    1 STI
+    -ROT
+    $TamkMemory$_store INLINECALLDICT
+    ENDC
+    c4 POP
+  }>
+  $TamkMemory$_fun_retrieve PROCREF:<{
+    257 PUSHINT
+    s2 PUSH
+    s0 s2 XCHG
+    __tact_dict_get_int_cell INLINECALLDICT
+    $MemoryValue$_load_opt INLINECALLDICT
+  }>
+  $TamkMemory$_fun_owner PROCREF:<{
+    OVER
+  }>
+  $MessageParameters$_constructor_bounce_to_value_mode_body PROCINLINE:<{
+    s3 s3 XCHG2
+    s0 s4 XCHG
+  }>
+  $TamkMemory$_fun_notify PROCINLINE:<{
+    __tact_context_get_sender INLINECALLDICT
+    FALSE
+    0 PUSHINT
+    s0 s3 XCHG2
+    66 PUSHINT
+    SWAP
+    $MessageParameters$_constructor_bounce_to_value_mode_body INLINECALLDICT
+        NEWC
+        b{01} STSLICECONST  // store tag = $0 and ihr_disabled = true
+        1 STI               // store `bounce`
+        b{000} STSLICECONST // store bounced = false and src = addr_none
+        STSLICE             // store `to`
+        SWAP
+        STGRAMS             // store `value`
+        106 PUSHINT         // 1 + 4 + 4 + 64 + 32 + 1
+        STZEROES
+        // → Stack state
+        // s0: Builder
+        // s1: `body`
+        // s2: `mode`
+        STDICT
+        ENDC
+        SWAP
+        SENDRAWMSG
+  }>
+  $MemoryValue$_constructor_hash_version PROCINLINE:<{
+  }>
+  $DeployOk$_constructor_queryId PROCINLINE:<{
+  }>
+  %retrieve PROC:<{
+    $TamkMemory$_contract_load INLINECALLDICT
+    ROT
+    $TamkMemory$_fun_retrieve INLINECALLDICT
+    2 1 BLKDROP2
+    $MemoryValue$_to_opt_external INLINECALLDICT
+  }>
+  %owner PROC:<{
+    $TamkMemory$_contract_load INLINECALLDICT
+    $TamkMemory$_fun_owner INLINECALLDICT
+    2 1 BLKDROP2
+  }>
+  recv_internal PROC:<{
+    SWAP
+    CTOS
+    2 PUSHINT
+    SDSKIPFIRST
+    1 LDI
+    1 LDI
+    LDMSGADDR
+    OVER
+    s3 s4 XCHG
+    s6 s6 XCHG2
+    4 TUPLE
+    __tact_context SETGLOB
+    s0 s2 XCHG
+    __tact_context_sender SETGLOB
+    $TamkMemory$_contract_load INLINECALLDICT
+    s0 s3 XCHG
+    IFJMP:<{
+      3 BLKDROP
+    }>
+    SWAP
+    32 LDUQ 130 THROWIFNOT
+    OVER
+    3457468042 PUSHINT
+    EQUAL
+    IFJMP:<{
+      NIP
+      257 PUSHINT
+      LDIX
+      257 PUSHINT
+      LDIX
+      257 PUSHINT
+      LDIX
+      DROP
+      21757 PUSHINT
+      __tact_context_get_sender INLINECALLDICT
+      s5 PUSH
+      SDEQ
+      THROWANYIFNOT
+      SWAP
+      257 PUSHINT
+      s0 s2 XCHG
+      $MemoryValue$_constructor_hash_version INLINECALLDICT
+      NEWC
+      $MemoryValue$_store_cell INLINECALLDICT
+      s3 s4 XCHG
+      s1 s2 XCHG
+      __tact_dict_set_int_cell INLINECALLDICT
+      $TamkMemory$_contract_store INLINECALLDICT
+    }>
+    SWAP
+    2490013878 PUSHINT
+    EQUAL
+    IFJMP:<{
+      64 LDU
+      DROP
+      $DeployOk$_constructor_queryId INLINECALLDICT
+      NEWC
+      $DeployOk$_store_cell INLINECALLDICT
+      s1 s2 XCHG
+      $TamkMemory$_fun_notify INLINECALLDICT
+      $TamkMemory$_contract_store INLINECALLDICT
+    }>
+    3 BLKDROP
+    130 THROW
+  }>
+}END>c
